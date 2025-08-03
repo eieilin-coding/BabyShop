@@ -2,9 +2,9 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Roles') }}
+                {{ __('Articles') }}
             </h2>
-            <a href="{{ route('roles.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2">
+            <a href="{{ route('articles.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2">
                 Create
             </a>
         </div>
@@ -20,34 +20,34 @@
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left" width="60">#</th>
                                 <th class="px-6 py-3 text-left">Name</th>
-                                <th class="px-6 py-3 text-left">Permissions</th>
+                                <th class="px-6 py-3 text-left">Author</th>
                                 <th class="px-6 py-3 text-left" width="180">Created</th>
                                 <th class="px-6 py-3 text-center" width="210">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @if ($roles->isNotEmpty())
-                                @foreach ($roles as $role)
+                            @if ($articles->isNotEmpty())
+                                @foreach ($articles as $article)
                                     <tr class="border-b">
                                         <td class="px-6 py-3 text-left">
-                                            {{ $role->id }}
+                                            {{ $article->id }}
                                         </td>
                                         <td class="px-6 py-3 text-left">
-                                            {{ $role->name }}
+                                            {{ $article->title }}
                                         </td>
                                         <td class="px-6 py-3 text-left">
-                                            {{ $role->permissions->pluck('name')->implode(', ') }}
+                                            {{ $article->author }}
                                         </td>
                                         <td class="px-6 py-3 text-left">
-                                            {{ \Carbon\Carbon::parse($role->created_at)->format('d M, Y') }}
+                                            {{ \Carbon\Carbon::parse($article->created_at)->format('d M, Y') }}
                                         </td>
                                         <td class="px-6 py-3 text-center">
-                                            <a href="{{ route("roles.edit", $role->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2
+                                             {{-- <a href="{{ route("permissions.edit", $article->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-2
                                              hover:bg-slate-600 me-2">
                                             Edit </a>
-                                            <a href="javascript:void(0);" onclick="deleteRole({{ $role->id }})"  class="bg-red-700 text-sm rounded-md text-white px-5 py-2
+                                            <a href="javascript:void(0);" onclick="deleteArticle({{ $article->id }})"  class="bg-red-700 text-sm rounded-md text-white px-5 py-2
                                              hover:bg-red-600">
-                                            Delete </a>  
+                                            Delete </a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -55,18 +55,17 @@
                         </tbody>
                     </table>
                     <div class="my-3">
-                         {{ $roles->links() }}
+                         {{ $articles->links() }}
                     </div>
                    
                 </div>
             </div>
-            
             <x-slot name="script">
                 <script type="text/javascript">
-                function deleteRole(id) {
+                function deletePermission(id) {
                     if(confirm("Are you sure you want to delete?")){
                         $.ajax({
-                            url : '{{route("roles.destroy") }}',
+                            url : '{{route("permissions.destroy") }}',
                             // url : 'permissions/' + id,
                             type: 'DELETE',
                             data: {id:id},
@@ -75,7 +74,7 @@
                                 'x-csrf-token' : '{{ csrf_token() }}'
                             },
                             success: function(response) {
-                                window.location.href = '{{ route("roles.index") }}';
+                                window.location.href = '{{ route("permissions.index") }}';
                             }
                         });
                     }
