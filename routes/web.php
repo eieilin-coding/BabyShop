@@ -3,8 +3,10 @@
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Counter;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,9 +39,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');    
-    // Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-    // Route::post('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
-    // Route::delete('/articles',[ArticleController::class, 'destroy'])->name('articles.destroy');
+    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+    Route::post('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
+    Route::delete('/articles',[ArticleController::class, 'destroy'])->name('articles.destroy');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');    
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users',[UserController::class, 'destroy'])->name('users.destroy');
 });
+
+// Route::get('/counter', function () {
+//     return view('livewire.counter');
+// });
+Route::get('/counter', Counter::class);
 
 require __DIR__.'/auth.php';
