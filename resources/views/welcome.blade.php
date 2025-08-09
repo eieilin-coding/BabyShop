@@ -53,9 +53,47 @@
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
            
-             @livewire('clicker')
+           <div class="p-4 border rounded">
+    <h2>User Settings</h2>
+
+    <!-- Name Field -->
+    <div class="mt-2">
+        <label>Name:</label>
+        <input type="text" wire:model="name">
+
+        <!-- Show icon if dirty -->
+        <span wire:dirty wire:target="name">✏️</span>
+    </div>
+
+    <!-- Email Field -->
+    <div class="mt-2">
+        <label>Email:</label>
+        <input type="email" wire:model="email">
+
+        <!-- Show icon if dirty -->
+        <span wire:dirty wire:target="email">✏️</span>
+    </div>
+
+    <!-- Save Button (visible if ANY input is dirty) -->
+    <div class="mt-4">
+        <button wire:click="save" wire:dirty>
+            Save Changes
+        </button>
+    </div>
+
+    <!-- Confirmation Message -->
+    @if (session()->has('message'))
+        <div class="mt-2 text-green-600">
+            {{ session('message') }}
+        </div>
+    @endif
+</div>
+
 
         </div>
+       
+
+
 
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>

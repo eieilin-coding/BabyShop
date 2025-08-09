@@ -5,13 +5,22 @@ use App\Models\User;
 use App\Models\Role;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
-    /**
-     * Display a listing of the resource.
-     */
+      public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view users', only: ['index']),
+            new Middleware('permission:edit users', only: ['edit']),
+            // new Middleware('permission:create roles', only: ['create']),
+            // new Middleware('permission:delete roles', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         $users = User::orderBy('name','ASC')->paginate(10);
@@ -84,8 +93,22 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+          
+       $user = User::find($request->id);
+
+        if($user == null){
+            session()->flash('error', 'User not found');
+            return response()->json([
+                'status' => false
+            ]);
+        }
+        $user->delete();
+         session()->flash('success', 'User deleted successfully');
+            return response()->json([
+                'status' => true
+            ]);
+
     }
 }
